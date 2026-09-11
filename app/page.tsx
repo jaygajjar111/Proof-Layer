@@ -1,158 +1,58 @@
 "use client";
-
+import {useState} from "react";
 import Link from "next/link";
-import { useState } from "react";
-import RotatingGlobe from "@/app/components/RotatingGlobe";
+import RotatingGlobe from "./components/RotatingGlobe";
+import {OrbitLogo} from "./components/OrbitLogo";
+import {OrbitCoin} from "./components/OrbitCoin";
 
-const categories = [
-  ["01", "Vehicles", "Verified ownership & history", "🚗"],
-  ["02", "Real Estate", "Evidence-backed property records", "⌂"],
-  ["03", "Equipment", "Machines with trusted provenance", "◈"],
-  ["04", "Agriculture", "Traceable real-world assets", "✦"],
-  ["05", "Energy", "Infrastructure & generation assets", "ϟ"],
-  ["06", "Collectibles", "Authenticity & lifecycle proof", "◇"],
+const assets=["Vehicles","Real Estate","Equipment","Agriculture","Energy","Collectibles"];
+const steps=[
+ ["01","Create","Register the real asset and its evidence."],
+ ["02","Verify","Validate identity, documents and asset evidence."],
+ ["03","Tokenize","Create a unique digital representation."],
+ ["04","Transfer","Move the digital record through controlled workflows."],
+ ["05","Record","Preserve a tamper-evident lifecycle history."]
 ];
 
-const steps = [
-  ["01", "Create", "Register the real-world asset and its evidence."],
-  ["02", "Verify", "Validate identity, documents and asset data."],
-  ["03", "Represent", "Create a unique digital representation."],
-  ["04", "Transfer", "Run a controlled buyer / seller workflow."],
-  ["05", "Record", "Keep a tamper-evident lifecycle history."],
-];
+export default function Home(){
+ const [modal,setModal]=useState<"login"|"signup"|"asset"|null>(null);
+ return <div className="shell"><div className="stars"/>
+  <header className="top">
+   <a href="#top"><OrbitLogo/></a>
+   <nav className="nav"><a href="#assets">Assets</a><a href="#works">How It Works</a><a href="#trust">Trust Layer</a><a href="#coin">ORBIT Coin</a><a href="#about">About</a></nav>
+   <div className="top-actions"><Link className="btn" href="/auth/login">Log in</Link><Link className="btn primary" href="/auth/sign-up">Sign up</Link></div>
+  </header>
+  <main id="top">
+   <section className="hero">
+    <div className="hero-copy">
+     <div className="eyebrow">REAL-WORLD ASSET INFRASTRUCTURE · ORBIT</div>
+     <h1>Make real assets <em>provable.</em></h1>
+     <p>ORBIT builds a trusted digital layer for real-world assets — connecting identity, evidence, verification, lifecycle records and future on-chain settlement.</p>
+     <div className="actions"><button className="btn primary" onClick={()=>setModal("asset")}>Register an Asset →</button><a className="btn" href="#assets">Explore the platform</a></div>
+     <div className="hero-proof"><div className="metric"><strong>01</strong>Vehicle-first MVP</div><div className="metric"><strong>5-step</strong>Verification lifecycle</div><div className="metric"><strong>On + Off</strong>chain architecture</div></div>
+    </div>
+    <RotatingGlobe/>
+   </section>
 
-const particles = Array.from({ length: 34 }, (_, i) => i);
+   <section className="section" id="assets"><div className="section-head"><span className="pill">ASSET UNIVERSE</span><h2>One infrastructure. Many real-world assets.</h2><p className="muted">We start with vehicles because ownership, documentation and transfers are tangible. The same verification architecture can expand to other asset classes.</p></div>
+    <div className="asset-grid">{assets.map((x,i)=><article className="asset-card" key={x}><div className="asset-art"/><span className="pill">0{i+1}</span><h3>{x}</h3><small>{i===0?"MVP focus · Registration · Inspection":"Expansion layer · Coming later"}</small></article>)}</div>
+   </section>
 
-export default function Home() {
-  const [active, setActive] = useState<string | null>(null);
+   <section className="section" id="works"><div className="section-head"><span className="pill">THE ORBIT FLOW</span><h2>From physical proof to a digital lifecycle.</h2><p className="muted">Every step is designed around evidence first. Blockchain is an integrity layer — not a replacement for legal ownership procedures.</p></div>
+    <div className="steps">{steps.map(([n,t,d])=><article className="step" key={n}><div className="step-no">{n}</div><h3>{t}</h3><p className="muted">{d}</p></article>)}</div>
+   </section>
 
-  return (
-    <main className="site">
-      <div className="starfield" aria-hidden="true">
-        {particles.map((i) => <i key={i} style={{ ["--i" as string]: i } as React.CSSProperties} />)}
-      </div>
-      <div className="ambient ambientOne" />
-      <div className="ambient ambientTwo" />
-      <div className="topGlow" />
+   <section className="section" id="trust"><div className="trust"><div className="trust-visual"><div className="trust-node">Identity verified</div><div className="trust-node">Document integrity</div><div className="trust-node">Asset evidence</div><div className="trust-node">Lifecycle event</div><div className="line" style={{left:"22%",top:"35%",width:"55%",transform:"rotate(12deg)"}}/><div className="line" style={{left:"32%",top:"60%",width:"45%",transform:"rotate(-22deg)"}}/></div><div><span className="pill">TRUST LAYER</span><h2>Trust is the product.</h2><p className="muted">Sensitive identity and documents stay off-chain. ORBIT can anchor hashes, asset identifiers, verification states and lifecycle events so the public record can be checked without exposing private evidence.</p><div className="notice">Legal note: a blockchain token transfer does not by itself transfer legal ownership of a vehicle or other regulated asset. Required government, RTO and contractual processes remain separate.</div><button className="btn primary" onClick={()=>setModal("asset")}>See the asset flow →</button></div></div></section>
 
-      <header className="topbar">
-        <Link className="brand" href="/" aria-label="ORBIT home">
-          <img src="/orbit-logo.svg" alt="" className="brandLogo" />
-          <span>ORBIT</span>
-        </Link>
-        <nav className="nav">
-          <a href="#assets">Assets</a>
-          <a href="#how">How It Works</a>
-          <a href="#trust">Trust Layer</a>
-          <a href="#about">About</a>
-        </nav>
-        <div className="navActions">
-          <Link className="btn ghost" href="/auth/login">Log in</Link>
-          <Link className="btn primary" href="/auth/sign-up">Sign up <span>↗</span></Link>
-        </div>
-      </header>
+   <section className="section" id="coin"><div className="coin-section"><OrbitCoin/><div><span className="pill">FUTURE TOKEN LAYER</span><h2>ORBIT Coin.</h2><p className="muted">A future ORBIT token can become the network's utility and settlement layer — for platform services, verification workflows, ecosystem incentives and on-chain operations, subject to legal, regulatory and economic design.</p><div className="notice"><b>Concept, not a live investment offer.</b><br/>The ORBIT Coin shown here is a product/brand concept. Supply, utility, chain, launch and legal classification will be decided only after technical, legal and compliance work.</div><div className="hero-proof"><div className="metric"><strong>O</strong>Earth / Orbit identity</div><div className="metric"><strong>∞</strong>Network utility concept</div><div className="metric"><strong>1</strong>Unified brand system</div></div></div></div></section>
 
-      <section className="hero">
-        <div className="heroCopy">
-          <div className="eyebrow"><i /> ORBIT · REAL-WORLD ASSET INFRASTRUCTURE</div>
-          <h1>Make real assets<br /><span>provable.</span></h1>
-          <p className="heroLead">
-            ORBIT creates trusted digital records for real-world assets — connecting
-            ownership evidence, verification and lifecycle history in one intelligent layer.
-          </p>
-          <div className="heroActions">
-            <Link className="btn primary big" href="/auth/sign-up">Create an Asset <span>→</span></Link>
-            <a className="btn glass big" href="#how">Explore ORBIT <span>↓</span></a>
-          </div>
-          <div className="proofStats">
-            <div><strong>01</strong><span>Identity</span></div>
-            <div><strong>02</strong><span>Evidence</span></div>
-            <div><strong>03</strong><span>Lifecycle</span></div>
-          </div>
-        </div>
+   <section className="cta"><span className="pill">BUILDING THE ORBIT NETWORK</span><h2>Real assets deserve a digital record people can trust.</h2><p className="muted">Start with one verified vehicle. Build toward a global asset infrastructure layer.</p><div className="actions"><button className="btn primary" onClick={()=>setModal("asset")}>Start with a vehicle →</button><Link className="btn" href="/auth/sign-up">Create ORBIT account</Link></div></section>
+  </main>
+  <footer className="footer" id="about"><span><OrbitLogo compact/> © 2026 ORBIT. Prototype / MVP.</span><span>Real assets · Real evidence · Real history</span></footer>
+  {modal&&<Modal type={modal} close={()=>setModal(null)}/>}</div>
+}
 
-        <div className="heroVisual" aria-label="ORBIT digital Earth visualization">
-          <div className="visualLabel labelA"><span className="signal" /> GLOBAL ASSET NETWORK</div>
-          <div className="orbit orbitA" /><div className="orbit orbitB" /><div className="orbit orbitC" />
-          <div className="orbit orbitD" />
-          <div className="glowCore" />
-          <div className="assetSphere">
-            <div className="globeAtmosphere" />
-            <img className="worldGlobe" src="/earth-globe.png" alt="" />
-            <div className="sphereGrid" />
-            <div className="sphereShine" />
-            <div className="sphereEdge" />
-            <div className="sphereDot d1" /><div className="sphereDot d2" /><div className="sphereDot d3" />
-          </div>
-          <div className="nodeLine lineOne"><span /><b>VERIFIED</b></div>
-          <div className="nodeLine lineTwo"><span /><b>RECORDED</b></div>
-          <div className="floatingCard cardTop"><span className="miniIcon">✓</span><div><b>Asset verified</b><small>Evidence matched</small></div></div>
-          <div className="floatingCard cardBottom"><span className="pulseDot" /><div><b>Lifecycle record</b><small>Immutable event trail</small></div></div>
-          <div className="scanLine" />
-        </div>
-      </section>
-
-      <section className="ticker" aria-label="ORBIT principles">
-        <span>VERIFY</span><b>✦</b><span>REPRESENT</span><b>✦</b><span>TRANSFER</span><b>✦</b><span>RECORD</span><b>✦</b><span>CONNECT</span>
-      </section>
-
-      <section className="section" id="assets">
-        <div className="sectionHead">
-          <div><div className="eyebrow">ONE INFRASTRUCTURE</div><h2>One orbit.<br /><span>Many asset worlds.</span></h2></div>
-          <p>Start with vehicles, then extend the same trust infrastructure across the physical economy.</p>
-        </div>
-        <div className="assetGrid">
-          {categories.map(([n, title, desc, icon]) => (
-            <button className={`assetTile ${active === title ? "selected" : ""}`} key={title} onClick={() => setActive(title)} type="button">
-              <span className="tileNumber">{n}</span><span className="tileIcon">{icon}</span>
-              <b>{title}</b><small>{desc}</small><span className="tileArrow">↗</span>
-            </button>
-          ))}
-        </div>
-        {active && <div className="selection">Selected: <b>{active}</b><span>·</span> Sign up to create a real asset record.</div>}
-      </section>
-
-      <section className="section process" id="how">
-        <div className="eyebrow">THE ORBIT LAYER</div>
-        <h2>From physical reality<br /><span>to trusted digital history.</span></h2>
-        <div className="steps">
-          {steps.map(([n, title, text]) => <div className="step" key={n}><span className="stepNo">{n}</span><div className="stepLine" /><h3>{title}</h3><p>{text}</p></div>)}
-        </div>
-      </section>
-
-      <section className="trustSection" id="trust">
-        <div className="trustVisual">
-          <div className="trustStars" />
-          <div className="ring ring1" /><div className="ring ring2" /><div className="ring ring3" />
-          <div className="trustCore"><img src="/orbit-logo.svg" alt="ORBIT" /></div>
-          <div className="trustOrbitalDot" />
-        </div>
-        <div className="trustCopy">
-          <div className="eyebrow">TRUST BY DESIGN</div>
-          <h2>Private evidence.<br /><span>Provable history.</span></h2>
-          <p>Personal data and raw documents stay off-chain. ORBIT can anchor hashes, verification states and lifecycle events to create a tamper-evident history.</p>
-          <div className="trustList">
-            <div><b>✓</b><span>Evidence-first asset records</span></div>
-            <div><b>✓</b><span>Controlled transfer workflow</span></div>
-            <div><b>✓</b><span>Blockchain-ready verification anchors</span></div>
-          </div>
-          <Link className="btn primary" href="/auth/sign-up">Build your first record →</Link>
-        </div>
-      </section>
-
-      <section className="cta" id="about">
-        <div className="ctaGrid" /><div className="ctaGlow" /><div className="ctaOrbit" />
-        <div className="eyebrow">ORBIT · BUILDING THE NEXT ASSET LAYER</div>
-        <h2>Bring the real world<br /><span>into a trusted orbit.</span></h2>
-        <p>Real assets. Real evidence. Real history.</p>
-        <Link className="btn primary big" href="/auth/sign-up">Get started <span>↗</span></Link>
-      </section>
-
-      <footer className="footer">
-        <Link className="brand" href="/"><img src="/orbit-logo.svg" alt="" className="brandLogo" /><span>ORBIT</span></Link>
-        <span>© 2026 ORBIT · Prototype / MVP</span>
-        <div><Link href="/auth/login">Login</Link><Link href="/auth/sign-up">Sign up</Link></div>
-      </footer>
-    </main>
-  );
+function Modal({type,close}:{type:"login"|"signup"|"asset",close:()=>void}){
+ const title=type==="asset"?"Register a real asset":type==="login"?"Welcome to ORBIT":"Create your ORBIT account";
+ return <div className="modal-backdrop" onMouseDown={close}><div className="modal" onMouseDown={e=>e.stopPropagation()}><div className="modal-head"><OrbitLogo compact/><button className="close" onClick={close}>×</button></div><h2>{title}</h2><p className="muted">{type==="asset"?"Prototype entry point — production flow will use authenticated ORBIT accounts.":"Choose your preferred sign-in method on the dedicated auth page."}</p>{type==="asset"?<><div className="field"><label>Asset name</label><input placeholder="2022 Honda City"/></div><div className="field"><label>Registration reference</label><input placeholder="Vehicle registration / document reference"/></div><button className="btn primary" onClick={()=>location.href="/auth/login"}>Continue to secure login →</button></>:<div className="actions"><Link className="btn primary" href={type==="login"?"/auth/login":"/auth/sign-up"}>{type==="login"?"Open Login":"Open Sign up"} →</Link></div>}</div></div>
 }
