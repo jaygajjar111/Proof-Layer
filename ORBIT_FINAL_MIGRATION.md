@@ -1,36 +1,30 @@
-# ORBIT — FINAL BRAND MIGRATION
+# ORBIT — GitHub replacement package
 
-Brand is now locked as: ORBIT
-Do not use ProofLayer or the old PL monogram in visible UI.
+This package is designed so you do NOT have to manually merge CSS or JSX.
 
-## Replace/add
-- app/components/RotatingGlobe.tsx
-- app/components/rotating-globe.css
-- public/orbit-logo.svg
+## Replace these files in the existing repo
+- `app/page.tsx`
+- `app/globals.css`
+- `app/layout.tsx`
+- `app/auth/login/page.tsx`
+- `app/auth/sign-up/page.tsx`
 
-## globals.css
-Add once:
-@import "./components/rotating-globe.css";
+## Add these files
+- `app/components/RotatingGlobe.tsx`
+- `app/components/rotating-globe.css`
+- `public/orbit-logo.svg`
+- `public/earth-globe.png`
 
-## page.tsx
-Add:
-import RotatingGlobe from "@/app/components/RotatingGlobe";
+Do not delete your existing `lib/`, `contracts/`, `supabase/`, API routes, package.json, tsconfig.json, or environment files.
 
-Use `<RotatingGlobe />` for the hero Earth.
+## Commit
+`Finalize ORBIT premium website, Earth animation and brand`
 
-Replace the old PL Trust Layer mark with:
-<img src="/orbit-logo.svg" alt="ORBIT" className="orbit-premium-logo" />
+Vercel should deploy automatically from `main`.
 
-## Brand text
-Replace visible ProofLayer references with ORBIT.
-Suggested hero:
-"Make real assets provable."
-
-Suggested trust line:
-"Real-world value. One connected orbit."
-
-## Important
-Keep internal repository folder names temporarily if needed; this package focuses on the visible product brand and components. Before public launch, also update metadata, README, contract comments, environment labels, and any remaining ProofLayer strings.
-
-## Future coin
-Use the same `orbit-logo.svg` symbol as the coin identity. The mark is deliberately recognizable without the word ORBIT.
+## Notes
+- ORBIT is the visible brand name.
+- The old PL monogram is removed from the Trust section.
+- The ORBIT symbol is used in the header, footer, auth pages and Trust section.
+- The same symbol is intended as the future coin identity.
+- The hero Earth and orbital system are continuously animated; reduced-motion users get a static fallback.
