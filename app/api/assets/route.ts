@@ -22,7 +22,7 @@ export async function POST(req:Request){
    verification_status:"pending"
   }).select("id,asset_code,verification_status").single();
   if(error) throw error;
-  await supabase.from("asset_events").insert({asset_id:data.asset_code,event_type:"asset_created",asset_id:data.id,event_type:"asset_created",metadata:{registration_ref:body.registration_ref}});
+  await supabase.from("asset_events").insert({asset_id:data.id,event_type:"asset_created",metadata:{registration_ref:body.registration_ref}});
   return NextResponse.json(data,{status:201});
  }catch(e){return NextResponse.json({error:"Vehicle asset creation failed",detail:String(e)},{status:400});}
 }
