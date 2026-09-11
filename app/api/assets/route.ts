@@ -1,0 +1,6 @@
+import {NextResponse} from "next/server";
+import {z} from "zod";
+import {createClient} from "@/lib/supabase/server";
+import {supabaseAdmin} from "@/lib/supabase";
+const schema=z.object({asset_type:z.literal("Vehicle"),name:z.string().min(2),declared_value_inr:z.number().nonnegative(),registration_ref:z.string().min(2),description:z.string().optional()});
+export async function POST(req:Request){try{const body=schema.parse(await req.json());const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)return NextResponse.json({error:"Authentication required"},{status:401});const admin=supabaseAdmin();const code="ORB-VEH-"+crypto.randomUUID().slice(0,8).toUpperCase();const {data,error}=await admin.from("assets").insert({asset_code:code,owner_id:user.id,asset_type:body.asset_type,name:body.name,declared_value_inr:body.declared_value_inr,description:body.description??null,verification_status:"pending",registration_ref:body.registration_ref}).select("id,asset_code,verification_status").single();if(error)throw error;await admin.from("asset_events").insert({asset_id:data.id,actor_id:user.id,event_type:"asset_created",metadata:{registration_ref:body.registration_ref}});return NextResponse.json(data,{status:201});}catch(e){return NextResponse.json({error:"Vehicle asset creation failed",detail:String(e)},{status:400});}}
