@@ -74,6 +74,8 @@ export default function Home() {
           <div className="orbit orbitC" />
           <div className="glowCore" />
           <div className="assetSphere">
+            <div className="globeHalo" />
+            <img className="worldGlobe" src="/earth-globe.png" alt="Digital globe representing verified real-world assets" />
             <div className="sphereGrid" />
             <div className="sphereShine" />
             <div className="sphereDot d1" />
