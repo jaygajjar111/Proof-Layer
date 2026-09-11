@@ -1,13 +1,53 @@
 "use client";
-import {useState} from "react";
-import {createClient} from "@/lib/supabase/browser";
 
-export default function SignUp(){
- const [email,setEmail]=useState(""); const [password,setPassword]=useState(""); const [msg,setMsg]=useState("");
- async function submit(){
-  const supabase=createClient();
-  const {error}=await supabase.auth.signUp({email,password});
-  setMsg(error?error.message:"Account created. Check your email if confirmation is enabled.");
- }
- return <main style={{maxWidth:480,margin:"80px auto",padding:24}}><a href="/">← ProofLayer</a><div className="card" style={{marginTop:25}}><h1>Create account</h1><p className="muted">Real Supabase Auth will be used when environment variables are configured.</p><div className="field"><label>Email</label><input value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></div><div className="field"><label>Password</label><input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Minimum 6 characters"/></div><button className="btn primary" onClick={submit}>Create Account →</button>{msg&&<div className="success">{msg}</div>}</div></main>
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/browser";
+
+export default function SignUp() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setMsg("");
+    setLoading(true);
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) setMsg(error.message);
+      else if (data.session) router.push("/");
+      else setMsg("Account created. Check your email to confirm your account.");
+    } catch (err) {
+      setMsg(err instanceof Error ? err.message : "Sign up failed. Check your Supabase configuration.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <main className="authPage">
+      <div className="authGlow" />
+      <div className="authShell">
+        <Link className="brand" href="/"><span className="brandMark"><span /></span><span>Proof<span className="brandAccent">Layer</span></span></Link>
+        <div className="authCard">
+          <div className="eyebrow">CREATE YOUR PROOF LAYER</div>
+          <h1>Start building trust.</h1>
+          <p className="muted">Create an account and prepare your first real-world asset record.</p>
+          <form onSubmit={submit} className="authForm">
+            <div className="field"><label>Email</label><input type="email" required value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com" /></div>
+            <div className="field"><label>Password</label><input type="password" minLength={6} required value={password} onChange={e=>setPassword(e.target.value)} placeholder="Minimum 6 characters" /></div>
+            <button className="btn primary big full" disabled={loading}>{loading ? "Creating…" : "Create account →"}</button>
+          </form>
+          {msg && <div className="authMessage">{msg}</div>}
+          <p className="authSwitch">Already have an account? <Link href="/auth/login">Log in</Link></p>
+        </div>
+        <Link className="backHome" href="/">← Back to ProofLayer</Link>
+      </div>
+    </main>
+  );
 }
