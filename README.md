@@ -1,28 +1,19 @@
-# ProofLayer V4 — Vehicle-first Real MVP
+# ORBIT
 
-This is the next step after V3.
+**Make real assets provable.**
 
-## What changed
-- Supabase browser/server client helpers
-- Real Sign Up page using Supabase Auth
-- Real Login page using Supabase Auth
-- Vehicle-only asset creation API
-- Vehicle-specific registration reference fields
-- Inspection and legal-transfer status fields
-- Asset activity/event model
-- Private document-storage recommendation
+ORBIT is a vehicle-first real-world asset infrastructure MVP. It combines identity, evidence, verification, digital asset records, controlled transfers and future blockchain anchoring.
 
-## Recommended deployment path
-1. Put this project in a GitHub repository.
-2. Create a Supabase project and run `supabase/schema.sql`.
-3. Create a private Storage bucket named `asset-documents`.
-4. Configure environment variables in Vercel.
-5. Deploy the Next.js app.
-6. Test signup/login and vehicle creation.
-7. Add authenticated middleware/protected dashboard.
-8. Add secure document upload + SHA-256 hashing.
-9. Add admin verification console.
-10. Add EVM testnet anchoring only after verification.
+## Run locally
+```bash
+npm install
+npm run dev
+```
 
-## Do not upload secrets
-Never commit `.env.local`, service-role keys, private keys, seed phrases, passwords or KYC documents to GitHub.
+Set the Supabase environment variables from `.env.example` before using authentication or the asset API.
+
+## Architecture
+- Off-chain: identity, KYC, raw documents/photos, inspections, payment/escrow and legal/RTO records.
+- On-chain: asset identifiers, hashes, verification anchors and lifecycle events where appropriate.
+
+The ORBIT Coin section is a future token concept only. A blockchain record or token transfer does not automatically transfer legal ownership of a vehicle or other regulated asset.
